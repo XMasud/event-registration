@@ -27,6 +27,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @NotNull
+    @NotNull(message = "Password is required")
     private String password;
+
+    @NotNull(message = "Role is required")
+    private String role;
 }
