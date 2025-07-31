@@ -8,6 +8,7 @@ import com.pm.userservice.repository.UserRepository;
 import com.pm.userservice.service.UserService;
 import com.pm.userservice.util.JwtUtil;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -49,7 +50,6 @@ public class UserController {
         responseBody.put("user", response);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
-
     }
 
     @PostMapping("/login")
@@ -70,4 +70,9 @@ public class UserController {
         return ResponseEntity.ok("Hello, authenticated user!");
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        System.out.println("Hey ----");
+        return ResponseEntity.ok().build();
+    }
 }

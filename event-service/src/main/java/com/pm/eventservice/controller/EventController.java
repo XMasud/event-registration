@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/event")
 public class EventController {
     private final EventService eventService;
 
