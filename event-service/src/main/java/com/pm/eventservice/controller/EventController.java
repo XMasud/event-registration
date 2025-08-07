@@ -33,8 +33,14 @@ public class EventController {
     }
 
     @PostMapping
-    public EventResponseDTO saveUser(@RequestBody @Valid EventRequestDTO request) {
+    public EventResponseDTO saveEvent(@RequestBody @Valid EventRequestDTO request) {
         EventResponseDTO response = eventService.createEvent(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED).getBody();
+    }
+
+    @PutMapping("/{id}")
+    public EventResponseDTO updateEvent(@PathVariable UUID id, @RequestBody @Valid EventRequestDTO request) {
+        EventResponseDTO response = eventService.updateEvent(id, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED).getBody();
     }
 
@@ -43,4 +49,11 @@ public class EventController {
         eventService.deleteEvent(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/generate-tickets/{id}")
+    public ResponseEntity<String> generateTicket(@PathVariable UUID id) {
+        int count = eventService.ticketGenerate(id);
+        return ResponseEntity.ok(count + " seats opened and published to Booking Service.");
+    }
+
 }

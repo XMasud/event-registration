@@ -1,4 +1,4 @@
-package com.pm.eventservice.dto;
+package com.pm.bookingservice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
