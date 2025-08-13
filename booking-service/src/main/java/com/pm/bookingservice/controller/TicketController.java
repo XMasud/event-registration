@@ -1,20 +1,18 @@
 package com.pm.bookingservice.controller;
 
+import com.pm.bookingservice.dto.TicketResponseDTO;
 import com.pm.bookingservice.model.Ticket;
 import com.pm.bookingservice.service.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/ticket")
 public class TicketController {
 
@@ -25,11 +23,11 @@ public class TicketController {
     }
 
     @GetMapping
-    public List<Ticket> getEvents() {
+    public List<TicketResponseDTO> getTicket() {
         return ticketService.getTickets();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTicket(@PathVariable UUID id){
 
         ticketService.deleteTicket(id);

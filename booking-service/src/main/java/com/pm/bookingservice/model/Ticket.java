@@ -11,7 +11,6 @@ import java.util.UUID;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,8 +21,18 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 
-    public Ticket(UUID eventId, TicketStatus status) {
+    private int price;
+
+    public Ticket(UUID eventId, TicketStatus status, int price) {
         this.eventId = eventId;
         this.status = status;
+        this.price = price;
+    }
+
+    @PrePersist
+    public void generateRandomPrice() {
+        if (this.price == 0) {
+            this.price = (int) (30 + (Math.random() * 170));
+        }
     }
 }

@@ -23,12 +23,10 @@ public class BookingConsumer {
     public void consume(Map<String, Object> eventData) {
 
         try{
-
             UUID eventId = UUID.fromString((String) eventData.get("event-id"));
             Integer seatCount = (Integer) eventData.get("seat-count");
 
             ticketService.generateTickets(eventId, seatCount);
-
             logger.info("📩 Received: {}",eventId);
 
         } catch (Exception e) {
