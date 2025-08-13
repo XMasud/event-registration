@@ -2,10 +2,10 @@ package com.pm.bookingservice.model;
 
 import com.pm.bookingservice.enums.TicketStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -22,6 +22,9 @@ public class Ticket {
     private TicketStatus status;
 
     private int price;
+
+    private LocalDateTime reservedAt;
+    private LocalDateTime expiresAt;
 
     public Ticket(UUID eventId, TicketStatus status, int price) {
         this.eventId = eventId;

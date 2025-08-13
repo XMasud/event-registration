@@ -13,4 +13,5 @@ public class TicketResponseDTO {
     private UUID id;
     private TicketStatus status;
     private int price;
+
 }

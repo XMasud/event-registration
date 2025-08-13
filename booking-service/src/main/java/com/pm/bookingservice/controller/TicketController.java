@@ -1,11 +1,10 @@
 package com.pm.bookingservice.controller;
 
+import com.pm.bookingservice.dto.TicketReserveResponseDTO;
 import com.pm.bookingservice.dto.TicketResponseDTO;
-import com.pm.bookingservice.model.Ticket;
 import com.pm.bookingservice.service.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +24,11 @@ public class TicketController {
     @GetMapping
     public List<TicketResponseDTO> getTicket() {
         return ticketService.getTickets();
+    }
+
+    @GetMapping("/reserve/{ticketId}")
+    public TicketReserveResponseDTO reserveTicket(@PathVariable UUID ticketId){
+        return ticketService.reserveTicket(ticketId);
     }
 
     @DeleteMapping("/{id}")
