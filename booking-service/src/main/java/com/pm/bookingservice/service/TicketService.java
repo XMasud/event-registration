@@ -89,11 +89,9 @@ public class TicketService {
         );
     }
 
-    @Scheduled(fixedRate = 60000)
+    //@Scheduled(fixedRate = 60000)
     @Transactional
     public void releaseExpiredReservations() {
-
-        logger.info("📩 Fixed scheduled ");
 
         List<Ticket> expiredTickets = ticketRepository
                 .findByStatusAndExpiresAtBefore(TicketStatus.RESERVED, LocalDateTime.now());
@@ -103,6 +101,5 @@ public class TicketService {
             ticket.setExpiresAt(null);
             ticketRepository.save(ticket);
         }
-        logger.info("📩 Fixed scheduled ");
     }
 }
