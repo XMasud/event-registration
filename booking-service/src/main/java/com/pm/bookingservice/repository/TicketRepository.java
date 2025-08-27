@@ -2,7 +2,11 @@ package com.pm.bookingservice.repository;
 
 import com.pm.bookingservice.enums.TicketStatus;
 import com.pm.bookingservice.model.Ticket;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,4 +26,8 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     Optional<Ticket> findByIdAndStatus(UUID ticketId, TicketStatus status);
 
     List<Ticket> findByStatusAndExpiresAtBefore(TicketStatus ticketStatus, LocalDateTime now);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT t FROM Ticket t WHERE t.id = :id AND t.status = 'AVAILABLE'")
+    Optional<Ticket> lockAvailableForConfirm(@Param("id") UUID id);
 }
