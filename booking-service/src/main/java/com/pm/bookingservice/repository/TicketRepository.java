@@ -23,7 +23,7 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
     @Transactional
     void deleteByEventId(UUID eventId);
 
-    Optional<Ticket> findByIdAndStatus(UUID ticketId, TicketStatus status);
+    boolean findByIdAndStatus(UUID ticketId, TicketStatus status);
 
     List<Ticket> findByStatusAndExpiresAtBefore(TicketStatus ticketStatus, LocalDateTime now);
 

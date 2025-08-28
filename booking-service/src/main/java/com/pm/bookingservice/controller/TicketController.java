@@ -26,9 +26,9 @@ public class TicketController {
         return ticketService.getTickets();
     }
 
-    @GetMapping("/reserve/{ticketId}")
-    public TicketReserveResponseDTO reserveTicket(@PathVariable UUID ticketId){
-        return ticketService.reserveTicket(ticketId);
+    @PostMapping("/reserve/{ticketId}")
+    public TicketReserveResponseDTO reserveTicket(@PathVariable UUID ticketId, @RequestHeader("X-User-Id") Long userId){
+        return ticketService.reserveTicket(ticketId, userId);
     }
 
     @DeleteMapping("/{id}")
@@ -38,6 +38,6 @@ public class TicketController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(Map.of("message","Event deleted"));
+                .body(Map.of("message","Ticket deleted"));
     }
 }

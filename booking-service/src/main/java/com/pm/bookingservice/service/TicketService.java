@@ -8,6 +8,7 @@ import com.pm.bookingservice.repository.TicketRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,16 +20,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final ReservationService reservationService;
+    private final StringRedisTemplate redisTemplate;
     Logger logger = LoggerFactory.getLogger(TicketService.class);
 
-    public TicketService(TicketRepository ticketRepository) {
+    public TicketService(TicketRepository ticketRepository, ReservationService reservationService, StringRedisTemplate redisTemplate) {
         this.ticketRepository = ticketRepository;
+        this.reservationService = reservationService;
+        this.redisTemplate = redisTemplate;
     }
 
     public List<TicketResponseDTO> getTickets(){
@@ -67,26 +73,34 @@ public class TicketService {
     }
 
     @Transactional
-    public TicketReserveResponseDTO reserveTicket(UUID ticketId) {
+    public TicketReserveResponseDTO reserveTicket(UUID ticketId, Long userId) {
 
-        Optional<Ticket> ticketOpt = ticketRepository.findByIdAndStatus(ticketId, TicketStatus.AVAILABLE);
+        String key = "idem:";
 
-        if(ticketOpt.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Corresponding ticket not found or available for reservation");
+        /*
 
-        Ticket ticket = ticketOpt.get();
-        ticket.setStatus(TicketStatus.RESERVED);
-        ticket.setReservedAt(LocalDateTime.now());
-        ticket.setExpiresAt(LocalDateTime.now().plusMinutes(15));
-        ticketRepository.save(ticket);
+        TicketReserveResponseDTO cached = (TicketReserveResponseDTO) redisTemplate.opsForValue().get(key);
+        if (cached != null) {
+            return cached;
+        }*/
 
-        return new TicketReserveResponseDTO(
-                ticket.getId(),
-                ticket.getEventId(),
-                ticket.getStatus(),
-                ticket.getReservedAt(),
-                ticket.getExpiresAt()
-        );
+        if (!ticketRepository.findByIdAndStatus(ticketId, TicketStatus.AVAILABLE)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ticket not available");
+        }
+
+        //String key = "idem:" + idempotencyKey;
+
+        boolean held = reservationService.reserveTicket(ticketId, userId);
+
+        if(!held)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Ticket already reserved");
+
+        UUID reservationId = UUID.randomUUID();
+        TicketReserveResponseDTO response = new TicketReserveResponseDTO(reservationId, TicketStatus.RESERVED, LocalDateTime.now(), LocalDateTime.now().plusMinutes(15));
+
+        redisTemplate.opsForValue().set(key, String.valueOf(response), 20, TimeUnit.MINUTES);
+
+        return response;
     }
 
     //@Scheduled(fixedRate = 60000)

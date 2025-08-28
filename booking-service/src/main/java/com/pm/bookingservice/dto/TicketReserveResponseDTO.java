@@ -15,8 +15,6 @@ public class TicketReserveResponseDTO {
 
     private UUID ticketId;
 
-    private UUID eventId;
-
     @Enumerated(EnumType.STRING)
     private TicketStatus status;
 

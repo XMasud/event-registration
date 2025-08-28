@@ -17,10 +17,10 @@ public class ReservationService {
         this.redis = redis;
     }
 
-    public boolean holdReserve(UUID ticketId, Long userId, UUID bookingId){
+    public boolean reserveTicket(UUID ticketId, Long userId){
 
         String key = "reservation:ticket:" + ticketId;
-        String value = "{\"userId\":\"" + userId + "\",\"bookingId\":\"" + bookingId + "\"}";
+        String value = "{\"userId\":\"" + userId + "\"}";
 
         Boolean ok = redis.opsForValue().setIfAbsent(key, value, HOLD_TTL);
         return Boolean.TRUE.equals(ok);
