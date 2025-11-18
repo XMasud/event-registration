@@ -1,5 +1,6 @@
 package com.pm.eventservice.service;
 
+import com.pm.eventservice.client.ProductClient;
 import com.pm.eventservice.dto.EventRequestDTO;
 import com.pm.eventservice.dto.EventResponseDTO;
 import com.pm.eventservice.dto.TicketGenerateRequestDTO;
@@ -17,10 +18,12 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final ProductClient productClient;
 
-    public EventService(EventRepository eventRepository, KafkaTemplate<String, Object> kafkaTemplate) {
+    public EventService(EventRepository eventRepository, KafkaTemplate<String, Object> kafkaTemplate, ProductClient productClient) {
         this.eventRepository = eventRepository;
         this.kafkaTemplate = kafkaTemplate;
+        this.productClient = productClient;
     }
 
     public List<EventResponseDTO> getEvents(){
@@ -80,5 +83,9 @@ public class EventService {
         kafkaTemplate.send("seats-opened", message);
 
         return event.getAvailableSeats();
+    }
+
+    public List<Map<String, Object>> getProduct(){
+        return productClient.getAllProducts();
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,4 +57,11 @@ public class EventController {
         return ResponseEntity.ok(count + " seats opened and published to Booking Service.");
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<List<Map<String, Object>>> getProducts() {
+
+        List<Map<String, Object>> products = eventService.getProduct();
+
+        return ResponseEntity.ok().body(products);
+    }
 }
