@@ -1,25 +1,22 @@
 package com.pm.eventservice.dto;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventRequestDTO {
-
+    @NotNull
     private String eventName;
     private String eventType;
     private String address;
     private LocalDate eventDate;
     private String performers;
     private int availableSeats;
-
-    public EventRequestDTO(String eventName, String eventType, String address, LocalDate eventDate, String performers, int availableSeats) {
-        this.eventName = eventName;
-        this.eventType = eventType;
-        this.address = address;
-        this.eventDate = eventDate;
-        this.performers = performers;
-        this.availableSeats = availableSeats;
-    }
 }

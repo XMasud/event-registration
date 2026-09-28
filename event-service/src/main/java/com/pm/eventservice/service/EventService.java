@@ -3,7 +3,6 @@ package com.pm.eventservice.service;
 import com.pm.eventservice.client.ProductClient;
 import com.pm.eventservice.dto.EventRequestDTO;
 import com.pm.eventservice.dto.EventResponseDTO;
-import com.pm.eventservice.dto.TicketGenerateRequestDTO;
 import com.pm.eventservice.exception.NotFoundException;
 import com.pm.eventservice.mapper.EventMapper;
 import com.pm.eventservice.model.Event;
