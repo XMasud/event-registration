@@ -92,20 +92,4 @@ class EventServiceTest {
 
         verify(eventRepository).findById(id);
     }
-
-    @Test
-    void createEvent() {
-    }
-
-    @Test
-    void updateEvent() {
-    }
-
-    @Test
-    void deleteEvent() {
-    }
-
-    @Test
-    void getProduct() {
-    }
 }
